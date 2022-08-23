@@ -75,7 +75,17 @@ WSGI_APPLICATION = 'weatherApp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': environ['DBNAME'],
+        'USER': environ['DBUSER'],
+        'PASSWORD': environ['DBPASSWORD'],
+        'HOST': environ['DBHOST'],
+        'PORT': environ['DBPORT'],
+    }
+}
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -86,6 +96,7 @@ DATABASES = {
         'PORT': '3306'
     }
 }
+"""
 
 
 # Password validation
