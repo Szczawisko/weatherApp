@@ -78,3 +78,5 @@ mysql_docker.txt
 Dockerfile
 .dockerignore
 *.txt
+
+credensial.py

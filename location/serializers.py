@@ -1,11 +1,11 @@
-from dataclasses import field
+from dataclasses import field, fields
 from pyexpat import model
 from rest_framework import serializers
 
-from .models import Location
+from .models import Location, Weather
 
 
-class LocationSerializers(serializers.ModelSerializer):
+class LocationSerializer(serializers.ModelSerializer):
 
     def validate_longitude(self,longitude):
         if longitude < -180 or longitude > 180:
@@ -20,3 +20,8 @@ class LocationSerializers(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields=["id","city_name","country","region","longitude","latitude"]
+
+class WeatherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weather
+        fields=["location","date","temperature","pressure","humidity","wind_speed","wind_direction"]

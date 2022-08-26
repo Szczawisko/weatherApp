@@ -7,3 +7,13 @@ class Location(models.Model):
     longitude = models.FloatField()
     latitude = models.FloatField()
 
+class Weather(models.Model):
+    location = models.ForeignKey(Location,on_delete=models.CASCADE)
+    date = models.DateField()
+    temperature  = models.FloatField()
+    pressure = models.IntegerField()
+    humidity = models.IntegerField()
+    wind_speed = models.FloatField()
+    wind_direction = models.IntegerField()
+
+
