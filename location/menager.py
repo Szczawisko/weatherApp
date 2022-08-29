@@ -19,9 +19,24 @@ class LocationMenager():
 
 class WeatherMenager():
     @staticmethod
+    def is_publish_date_actual(weather):
+        difference = datetime.now() - weather.pub_date.replace(tzinfo=None)
+        if divmod(difference.total_seconds(),86400)[0] >=1:
+            return False
+
+        return True
+
+
+    @staticmethod
     def get_weather_from_db(location,date):
         try:
-            return Weather.objects.get(location=location,date=date)
+            weather = Weather.objects.get(location=location,date=date)
+            if WeatherMenager.is_publish_date_actual(weather):
+                return weather
+
+            weather.delete()
+            return None 
+
         except Weather.DoesNotExist:
             return None
 
@@ -39,7 +54,12 @@ class WeatherMenager():
         date_to_find = datetime(date.year,date.month,date.day,12)
         date_now = datetime.fromisoformat(json['list'][0]['dt_txt'])
         difference = date_to_find-date_now
-        index = int(divmod(difference.total_seconds(),3600)[0]/3) if int(divmod(difference.total_seconds(),3600)[0]/3) < 40 else 39
+        index = int(divmod(difference.total_seconds(),3600)[0]/3)
+
+        if index>=40:
+            index = 39 
+        elif index < 0:
+            index = 0
 
         weather = json['list'][index]
 

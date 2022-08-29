@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'weatherApp.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-"""
+#"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -98,7 +98,7 @@ DATABASES = {
         'PORT': '3306'
     }
 }
-#"""
+"""
 
 
 # Password validation
@@ -129,7 +129,7 @@ TIME_ZONE = 'CET'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
