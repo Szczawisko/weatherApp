@@ -1,14 +1,21 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from datetime import datetime, timedelta
 
 #from .models import Location, Weather
-from .serializers import LocationSerializer, WeatherSerializer
+from .serializers import LocationSerializer, WeatherSerializer, UserSerializer
 from .menager import LocationMenager, WeatherMenager
+from .permission import IsAdminUserOrReadOnly
+from location import serializers
 
 class LocationListApiView(APIView):
+
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUserOrReadOnly]
 
     def get(self,request,*args, **kwargs):
         locations = LocationMenager.get_locations()
@@ -31,6 +38,9 @@ class LocationListApiView(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class WeatherListApiView(APIView):
+
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self,request,id,*args, **kwargs):
         location = LocationMenager.get_location(id)
@@ -60,6 +70,18 @@ class WeatherListApiView(APIView):
             serializer = WeatherSerializer(weather)
 
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+class UserRegister(APIView):
+    def post(self,request,*args, **kwargs):
+        data = {
+            "username":request.data.get("username"),
+            "password":request.data.get("password"),
+        }
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"res":"User was created"},status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
     
