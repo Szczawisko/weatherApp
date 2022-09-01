@@ -72,6 +72,15 @@ class WeatherListApiView(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 class UserRegister(APIView):
+
+    authentication_classes = [BasicAuthentication]
+
+    def get(self,request,*args, **kwargs):
+        if str(request.user) == "AnonymousUser":
+            return Response({"detail": "Invalid username/password."},status=status.HTTP_401_UNAUTHORIZED)
+    
+        return Response({"res":"logged in"},status=status.HTTP_200_OK)
+
     def post(self,request,*args, **kwargs):
         data = {
             "username":request.data.get("username"),
