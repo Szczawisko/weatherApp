@@ -1,9 +1,4 @@
-from dataclasses import field, fields
-from pyexpat import model
 from rest_framework import serializers
-
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 
 from .models import Location, Weather
 
@@ -28,12 +23,3 @@ class WeatherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weather
         fields=["location","date","temperature","pressure","humidity","wind_speed","wind_direction"]
-
-class UserSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        validated_data["password"] = make_password(validated_data["password"])
-        return super().create(validated_data)
-
-    class Meta:
-        model = User
-        fields = ["username","password"]
