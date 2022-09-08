@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from datetime import datetime, timedelta
@@ -13,7 +13,7 @@ from user.permission import IsAdminUserOrReadOnly
 
 class LocationListApiView(APIView):
 
-    authentication_classes = [BasicAuthentication]
+    authentication_classes = [SessionAuthentication,BasicAuthentication]
     permission_classes = [IsAdminUserOrReadOnly]
 
     def get(self,request,*args, **kwargs):
@@ -38,7 +38,7 @@ class LocationListApiView(APIView):
 
 class WeatherListApiView(APIView):
 
-    authentication_classes = [BasicAuthentication]
+    authentication_classes = [SessionAuthentication,BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self,request,id,*args, **kwargs):

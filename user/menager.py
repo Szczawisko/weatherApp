@@ -11,7 +11,3 @@ class UserMenager:
             return User.objects.get(id=id)
         except User.DoesNotExist:
             return None
-
-    @staticmethod
-    def save_user(data):
-        User.objects.create_user(username=data["username"],password=data["password"])
