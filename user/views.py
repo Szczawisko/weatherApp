@@ -1,11 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-from django.contrib.auth import login
+from rest_framework import exceptions
 
 from .serializers import UserSerializer, LoginSerializer
 from .menager import UserMenager
+from .JWTAuthentication import JWTMenager
 
 
 class UserListApiView(APIView):
@@ -53,7 +53,19 @@ class UserLogin(APIView):
         }
         serializer = LoginSerializer(data=data)
         if serializer.is_valid():
-            login(request,serializer.validated_data['user'])
-            return Response({"res":"Login in"},status=status.HTTP_200_OK)
+            menager = JWTMenager()
+            tokens = menager.login(serializer.validated_data['user'])
+            return Response(tokens,status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_401_UNAUTHORIZED)
+
+class TokenRefresh(APIView):
+
+    def post(self,request,*args, **kwargs):
+        token = request.data.get("refresh")
+        menager = JWTMenager()
+        try:
+            refresh_token = menager.create_new_token(token)
+            return Response(refresh_token,status=status.HTTP_200_OK)
+        except exceptions.ParseError as e:
+            return Response({"res":e.detail},status=status.HTTP_400_BAD_REQUEST)
         

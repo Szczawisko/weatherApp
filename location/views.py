@@ -1,19 +1,18 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from datetime import datetime, timedelta
 
-#from .models import Location, Weather
 from .serializers import LocationSerializer, WeatherSerializer
 from .menager import LocationMenager, WeatherMenager
 from user.permission import IsAdminUserOrReadOnly
+from user.JWTAuthentication import JWTAuthentication
 
 class LocationListApiView(APIView):
 
-    authentication_classes = [SessionAuthentication,BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUserOrReadOnly]
 
     def get(self,request,*args, **kwargs):
@@ -38,7 +37,7 @@ class LocationListApiView(APIView):
 
 class WeatherListApiView(APIView):
 
-    authentication_classes = [SessionAuthentication,BasicAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self,request,id,*args, **kwargs):
